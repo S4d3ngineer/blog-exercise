@@ -1,4 +1,5 @@
 import functools
+import os
 
 import flask
 from flask import Flask, render_template, redirect, url_for, flash
@@ -13,7 +14,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '39a5bd8e06d6311d4b1b208688b919c9'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -29,7 +30,8 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+# postgrade url is stored in env variable on heroku - if it is not found app is going to use sqlite db
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
