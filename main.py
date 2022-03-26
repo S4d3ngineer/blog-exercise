@@ -32,9 +32,10 @@ gravatar = Gravatar(app,
 # CONNECT TO DB
 # postgrade url is stored in env variable on heroku - if it is not found app is going to use sqlite db
 postgres_url = os.environ.get("DATABASE_URL")
+sqlite_url = "sqlite:///blog.db"
 if postgres_url.startswith("postgres://"):
     postgres_url.replace("postgres://", "postgresql://")
-app.config['SQLALCHEMY_DATABASE_URI'] = postgres_url, "sqlite:///blog.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = postgres_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
